@@ -14,9 +14,35 @@ export function Hero() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Text Content */}
-          <div className="text-center lg:text-left space-y-8 animate-fadeInUp">
+        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-12 items-center">
+          {/* Profile Image - aparece primeiro no mobile */}
+          <div className="flex justify-center lg:justify-end animate-slideInRight order-1 lg:order-2">
+            <div className="relative">
+              <div className="w-80 h-80 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 p-1 shadow-2xl">
+                <div className="w-full h-full rounded-full bg-white dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+                  <Image
+                    src="https://res.cloudinary.com/dvqzo7snh/image/upload/v1755253564/portfolio/portfolio/fotojose.jpg"
+                    alt="José Leite - Programador Web"
+                    width={300}
+                    height={300}
+                    className="rounded-full object-cover w-full h-full"
+                  />
+                </div>
+              </div>
+              
+              {/* Floating elements */}
+              <div className="absolute -top-4 -right-4 w-20 h-20 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl rotate-12 flex items-center justify-center shadow-lg animate-bounce">
+                <span className="text-2xl">⚛️</span>
+              </div>
+              
+              <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-gradient-to-br from-green-400 to-blue-500 rounded-2xl -rotate-12 flex items-center justify-center shadow-lg animate-bounce delay-500">
+                <span className="text-xl">💻</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Text Content - aparece depois no mobile */}
+          <div className="text-center lg:text-left space-y-8 animate-fadeInUp order-2 lg:order-1">
             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white leading-tight">
               Olá, eu sou{' '}
               <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -70,32 +96,6 @@ export function Hero() {
                   {skill}
                 </span>
               ))}
-            </div>
-          </div>
-
-          {/* Profile Image */}
-          <div className="flex justify-center lg:justify-end animate-slideInRight">
-            <div className="relative">
-              <div className="w-80 h-80 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 p-1 shadow-2xl">
-                <div className="w-full h-full rounded-full bg-white dark:bg-gray-800 flex items-center justify-center overflow-hidden">
-                  <Image
-                    src="https://res.cloudinary.com/dvqzo7snh/image/upload/v1755253564/portfolio/portfolio/fotojose.jpg"
-                    alt="José Leite - Programador Web"
-                    width={300}
-                    height={300}
-                    className="rounded-full object-cover w-full h-full"
-                  />
-                </div>
-              </div>
-              
-              {/* Floating elements */}
-              <div className="absolute -top-4 -right-4 w-20 h-20 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl rotate-12 flex items-center justify-center shadow-lg animate-bounce">
-                <span className="text-2xl">⚛️</span>
-              </div>
-              
-              <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-gradient-to-br from-green-400 to-blue-500 rounded-2xl -rotate-12 flex items-center justify-center shadow-lg animate-bounce delay-500">
-                <span className="text-xl">�</span>
-              </div>
             </div>
           </div>
         </div>
