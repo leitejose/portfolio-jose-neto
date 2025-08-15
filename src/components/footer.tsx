@@ -1,6 +1,6 @@
 import { Settings } from 'lucide-react'
 import Link from 'next/link'
-import Image from 'next/image'
+import Logo from './logo'
 
 export function Footer() {
   return (
@@ -10,21 +10,13 @@ export function Footer() {
           {/* Brand */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
-              <Image
-                src="https://res.cloudinary.com/dvqzo7snh/image/upload/v1755253565/portfolio/portfolio/logo.png"
-                alt="José Leite - Programador Web"
-                width={32}
-                height={32}
-                className="rounded-lg"
-              />
+              <Logo width={32} height={32} alt="José Leite - Programador Web" />
               <div>
                 <h3 className="text-xl font-bold">José Leite</h3>
                 <p className="text-sm text-gray-400">Programador Web & Mestrando em SIG</p>
               </div>
             </div>
-            <p className="text-gray-400 text-sm">
-              Especializado em desenvolvimento web moderno, análise de dados e soluções de Business Intelligence.
-            </p>
+           
           </div>
 
           {/* Links */}
