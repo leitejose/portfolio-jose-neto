@@ -25,15 +25,20 @@ export default function Logo({
     setMounted(true)
   }, [])
 
+  // URLs das logos
+  const logoWhite = "https://res.cloudinary.com/dvqzo7snh/image/upload/v1755253565/portfolio/portfolio/logo.png"
+  const logoBlack = "https://res.cloudinary.com/dvqzo7snh/image/upload/v1755254425/portfolio/portfolio/logo-black.png"
+
   if (!mounted) {
     // Retorna logo branca por padrão durante o loading
     return (
       <Image
-        src="https://res.cloudinary.com/dvqzo7snh/image/upload/v1755253565/portfolio/portfolio/logo.png"
+        src={logoWhite}
         alt={alt}
         width={width}
         height={height}
         className={className}
+        priority
       />
     )
   }
@@ -43,9 +48,7 @@ export default function Logo({
   const isDark = currentTheme === 'dark'
 
   // Escolhe a logo baseada no tema
-  const logoSrc = isDark 
-    ? "https://res.cloudinary.com/dvqzo7snh/image/upload/v1755253565/portfolio/portfolio/logo.png" // Logo branca para tema escuro
-    : "https://res.cloudinary.com/dvqzo7snh/image/upload/v1755254075/portfolio/portfolio/logo-black.png" // Logo preta para tema claro
+  const logoSrc = isDark ? logoWhite : logoBlack
 
   return (
     <Image
@@ -54,6 +57,12 @@ export default function Logo({
       width={width}
       height={height}
       className={`${className} transition-all duration-300`}
+      priority
+      onError={(e) => {
+        console.error('Erro ao carregar logo:', logoSrc)
+        // Fallback para logo branca se der erro
+        e.currentTarget.src = logoWhite
+      }}
     />
   )
 }
