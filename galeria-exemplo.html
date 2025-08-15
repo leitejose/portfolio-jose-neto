@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeria de Fotos - Grid Mosaico</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .galeria-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .galeria-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 8px;
+            width: 100%;
+        }
+
+        .foto-item {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .foto-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.2s ease;
+        }
+
+        .foto-item:hover img {
+            transform: scale(1.02);
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .galeria-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 5px;
+            }
+            
+            .foto-item img {
+                height: 150px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .galeria-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                gap: 4px;
+            }
+            
+            .foto-item img {
+                height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="galeria-container">
+        <h1>Galeria de Fotos</h1>
+        
+        <div class="galeria-grid">
+            <div class="foto-item">
+                <img src="https://picsum.photos/400/300?random=1" alt="Foto 1">
+            </div>
+            <div class="foto-item">
+                <img src="https://picsum.photos/400/300?random=2" alt="Foto 2">
+            </div>
+            <div class="foto-item">
+                <img src="https://picsum.photos/400/300?random=3" alt="Foto 3">
+            </div>
+            <div class="foto-item">
+                <img src="https://picsum.photos/400/300?random=4" alt="Foto 4">
+            </div>
+            <div class="foto-item">
+                <img src="https://picsum.photos/400/300?random=5" alt="Foto 5">
+            </div>
+            <div class="foto-item">
+                <img src="https://picsum.photos/400/300?random=6" alt="Foto 6">
+            </div>
+            <div class="foto-item">
+                <img src="https://picsum.photos/400/300?random=7" alt="Foto 7">
+            </div>
+            <div class="foto-item">
+                <img src="https://picsum.photos/400/300?random=8" alt="Foto 8">
+            </div>
+            <div class="foto-item">
+                <img src="https://picsum.photos/400/300?random=9" alt="Foto 9">
+            </div>
+            <div class="foto-item">
+                <img src="https://picsum.photos/400/300?random=10" alt="Foto 10">
+            </div>
+            <div class="foto-item">
+                <img src="https://picsum.photos/400/300?random=11" alt="Foto 11">
+            </div>
+            <div class="foto-item">
+                <img src="https://picsum.photos/400/300?random=12" alt="Foto 12">
+            </div>
+            <div class="foto-item">
+                <img src="https://picsum.photos/400/300?random=13" alt="Foto 13">
+            </div>
+            <div class="foto-item">
+                <img src="https://picsum.photos/400/300?random=14" alt="Foto 14">
+            </div>
+            <div class="foto-item">
+                <img src="https://picsum.photos/400/300?random=15" alt="Foto 15">
+            </div>
+            <div class="foto-item">
+                <img src="https://picsum.photos/400/300?random=16" alt="Foto 16">
+            </div>
+            <div class="foto-item">
+                <img src="https://picsum.photos/400/300?random=17" alt="Foto 17">
+            </div>
+            <div class="foto-item">
+                <img src="https://picsum.photos/400/300?random=18" alt="Foto 18">
+            </div>
+            <div class="foto-item">
+                <img src="https://picsum.photos/400/300?random=19" alt="Foto 19">
+            </div>
+            <div class="foto-item">
+                <img src="https://picsum.photos/400/300?random=20" alt="Foto 20">
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,117 @@
+import { NextResponse } from 'next/server'
+import { PrismaClient } from '@prisma/client'
+import { v2 as cloudinary } from 'cloudinary'
+
+const prisma = new PrismaClient()
+
+// Configurar Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+})
+
+export async function POST() {
+  try {
+    console.log('Iniciando sincronização de fotos...')
+    
+    // Buscar ou criar usuário padrão
+    let defaultUser = await prisma.user.findFirst({
+      where: { email: 'admin@portfolio.com' }
+    })
+
+    if (!defaultUser) {
+      console.log('Criando usuário padrão...')
+      defaultUser = await prisma.user.create({
+        data: {
+          email: 'admin@portfolio.com',
+          name: 'José - Fotógrafo',
+          role: 'ADMIN'
+        }
+      })
+      console.log('Usuário criado:', defaultUser.id)
+    }
+
+    console.log('Buscando fotos do Cloudinary...')
+    
+    // Buscar todas as fotos do Cloudinary
+    const cloudinaryPhotos = await cloudinary.search
+      .expression('resource_type:image')
+      .with_field(['context', 'tags'])
+      .sort_by('created_at', 'desc')
+      .max_results(500)
+      .execute()
+
+    console.log(`Encontradas ${cloudinaryPhotos.resources.length} fotos no Cloudinary`)
+
+    let syncedCount = 0
+    let skippedCount = 0
+
+    for (const cloudinaryPhoto of cloudinaryPhotos.resources) {
+      try {
+        // Verificar se a foto já existe no banco
+        const existingPhoto = await prisma.photo.findFirst({
+          where: { publicId: cloudinaryPhoto.public_id }
+        })
+
+        if (existingPhoto) {
+          skippedCount++
+          continue
+        }
+
+        // Extrair informações da foto
+        const title = cloudinaryPhoto.context?.title || 
+                     cloudinaryPhoto.public_id.split('/').pop()?.replace(/[-_]/g, ' ') || 
+                     'Foto sem título'
+        
+        const description = cloudinaryPhoto.context?.description || ''
+        const location = cloudinaryPhoto.context?.location || 'Localização não definida'
+
+        // Criar foto no banco de dados
+        await prisma.photo.create({
+          data: {
+            title,
+            description,
+            imageUrl: cloudinaryPhoto.secure_url,
+            publicId: cloudinaryPhoto.public_id,
+            location,
+            featured: false,
+            published: true,
+            photographerId: defaultUser.id,
+          }
+        })
+
+        syncedCount++
+        console.log(`Foto sincronizada: ${title}`)
+        
+      } catch (photoError) {
+        console.error(`Erro ao processar foto ${cloudinaryPhoto.public_id}:`, photoError)
+        // Continua com a próxima foto mesmo se uma falhar
+      }
+    }
+
+    console.log(`Sincronização concluída: ${syncedCount} adicionadas, ${skippedCount} puladas`)
+
+    return NextResponse.json({
+      success: true,
+      message: `Sincronização concluída! ${syncedCount} fotos adicionadas, ${skippedCount} já existiam.`,
+      stats: {
+        synced: syncedCount,
+        skipped: skippedCount,
+        total: cloudinaryPhotos.resources.length
+      }
+    })
+
+  } catch (error) {
+    console.error('Erro ao sincronizar fotos:', error)
+    return NextResponse.json(
+      { 
+        error: 'Erro ao sincronizar fotos do Cloudinary',
+        details: error instanceof Error ? error.message : 'Erro desconhecido'
+      },
+      { status: 500 }
+    )
+  } finally {
+    await prisma.$disconnect()
+  }
+}

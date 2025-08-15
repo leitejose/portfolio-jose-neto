@@ -1,0 +1,8 @@
+export { Hero } from './hero'
+export { About } from './about'
+export { Projects } from './projects'
+export { Contact } from './contact'
+export { Navigation } from './navigation'
+export { Footer } from './footer'
+export { ThemeProvider } from './theme-provider'
+export { default as ImageUpload } from './image-upload'

@@ -1,0 +1,245 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  avatar    String?
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  posts     Post[]
+  photos    Photo[]
+
+  @@map("users")
+}
+
+model Post {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  excerpt     String?
+  content     String
+  coverImage  String?
+  published   Boolean  @default(false)
+  featured    Boolean  @default(false)
+  views       Int      @default(0)
+  readTime    Int      @default(5) // in minutes
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  publishedAt DateTime?
+
+  // Relations
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId String
+
+  categories PostCategory[]
+  tags       PostTag[]
+
+  @@map("posts")
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  color       String?  // hex color for UI
+  createdAt   DateTime @default(now())
+
+  // Relations
+  posts PostCategory[]
+
+  @@map("categories")
+}
+
+model Tag {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
+  createdAt DateTime @default(now())
+
+  // Relations
+  posts PostTag[]
+
+  @@map("tags")
+}
+
+model PostCategory {
+  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId     String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId String
+
+  @@id([postId, categoryId])
+  @@map("post_categories")
+}
+
+model PostTag {
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId String
+  tag    Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  tagId  String
+
+  @@id([postId, tagId])
+  @@map("post_tags")
+}
+
+model Photo {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  location    String?
+  country     String?
+  coordinates String? // lat,lng format
+  imageUrl    String
+  thumbnailUrl String?
+  publicId    String? // for Cloudinary
+  camera      String?
+  lens        String?
+  settings    String? // JSON string with camera settings
+  takenAt     DateTime?
+  featured    Boolean  @default(false)
+  published   Boolean  @default(true)
+  views       Int      @default(0)
+  likes       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  photographer   User   @relation(fields: [photographerId], references: [id], onDelete: Cascade)
+  photographerId String
+
+  categories PhotoCategory[]
+  tags       PhotoTag[]
+
+  @@map("photos")
+}
+
+model PhotoCategoryType {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  color       String?
+  createdAt   DateTime @default(now())
+
+  // Relations
+  photos PhotoCategory[]
+
+  @@map("photo_category_types")
+}
+
+model PhotoTagType {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
+  createdAt DateTime @default(now())
+
+  // Relations
+  photos PhotoTag[]
+
+  @@map("photo_tag_types")
+}
+
+model PhotoCategory {
+  photo      Photo             @relation(fields: [photoId], references: [id], onDelete: Cascade)
+  photoId    String
+  category   PhotoCategoryType @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId String
+
+  @@id([photoId, categoryId])
+  @@map("photo_categories")
+}
+
+model PhotoTag {
+  photo   Photo        @relation(fields: [photoId], references: [id], onDelete: Cascade)
+  photoId String
+  tag     PhotoTagType @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  tagId   String
+
+  @@id([photoId, tagId])
+  @@map("photo_tags")
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  description String
+  content     String?
+  imageUrl    String?
+  publicId    String?  // Cloudinary public ID
+  demoUrl     String?
+  repoUrl     String?
+  featured    Boolean  @default(false)
+  published   Boolean  @default(true)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  technologies ProjectTechnology[]
+
+  @@map("projects")
+}
+
+model Technology {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
+  color     String?
+  icon      String?
+  createdAt DateTime @default(now())
+
+  projects ProjectTechnology[]
+
+  @@map("technologies")
+}
+
+model ProjectTechnology {
+  project      Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId    String
+  technology   Technology @relation(fields: [technologyId], references: [id], onDelete: Cascade)
+  technologyId String
+
+  @@id([projectId, technologyId])
+  @@map("project_technologies")
+}
+
+model Contact {
+  id        String      @id @default(cuid())
+  name      String
+  email     String
+  subject   String
+  message   String
+  status    ContactStatus @default(UNREAD)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  @@map("contacts")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum ContactStatus {
+  UNREAD
+  READ
+  REPLIED
+  ARCHIVED
+}

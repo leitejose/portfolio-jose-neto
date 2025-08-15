@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fotografia - José</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header/Navigation -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-brand">
+                <h2>José</h2>
+                <span>Técnico de Sistemas</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Início</a></li>
+                <li><a href="index.html#about" class="nav-link">Sobre</a></li>
+                <li><a href="index.html#projects" class="nav-link">Projetos</a></li>
+                <li><a href="blog.html" class="nav-link">Blog</a></li>
+                <li><a href="photography.html" class="nav-link active">Fotografia</a></li>
+                <li><a href="index.html#contact" class="nav-link">Contato</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Photography Hero -->
+    <section class="photography-hero">
+        <div class="hero-background">
+            <img src="images/photography/hero-bg.jpg" alt="Fotografia de viagem">
+        </div>
+        <div class="hero-content">
+            <h1>Fotografia de Viagens</h1>
+            <p>Capturando momentos únicos pelo mundo</p>
+            <div class="hero-stats">
+                <div class="stat">
+                    <h3>50+</h3>
+                    <span>Cidades Visitadas</span>
+                </div>
+                <div class="stat">
+                    <h3>15</h3>
+                    <span>Países</span>
+                </div>
+                <div class="stat">
+                    <h3>1000+</h3>
+                    <span>Fotos Capturadas</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Photography Introduction -->
+    <section class="photo-intro">
+        <div class="container">
+            <div class="intro-content">
+                <h2>Minha Paixão pela Fotografia</h2>
+                <p>Além da tecnologia, tenho uma grande paixão por fotografia de viagens. Cada destino oferece uma oportunidade única de capturar momentos especiais, culturas diferentes e paisagens deslumbrantes. Aqui compartilho algumas das minhas aventuras fotográficas pelo mundo.</p>
+                <div class="intro-features">
+                    <div class="feature">
+                        <i class="fas fa-camera"></i>
+                        <h4>Paisagens</h4>
+                        <p>Capturando a beleza natural</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-globe"></i>
+                        <h4>Culturas</h4>
+                        <p>Documentando diversidade cultural</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-mountain"></i>
+                        <h4>Aventuras</h4>
+                        <p>Registrando momentos únicos</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Photo Gallery Filters -->
+    <section class="gallery-section">
+        <div class="container">
+            <div class="gallery-filters">
+                <button class="filter-btn active" data-filter="all">Todas</button>
+                <button class="filter-btn" data-filter="landscapes">Paisagens</button>
+                <button class="filter-btn" data-filter="cities">Cidades</button>
+                <button class="filter-btn" data-filter="culture">Cultura</button>
+                <button class="filter-btn" data-filter="nature">Natureza</button>
+                <button class="filter-btn" data-filter="adventure">Aventura</button>
+            </div>
+
+            <!-- Photo Gallery -->
+            <div class="photo-gallery">
+                <!-- Paisagens -->
+                <div class="photo-item" data-category="landscapes">
+                    <img src="images/photography/landscape1.jpg" alt="Montanhas ao nascer do sol">
+                    <div class="photo-overlay">
+                        <div class="photo-info">
+                            <h3>Montanhas dos Alpes</h3>
+                            <p>Suíça, 2024</p>
+                            <div class="photo-actions">
+                                <button class="view-btn" data-image="images/photography/landscape1.jpg"><i class="fas fa-eye"></i></button>
+                                <button class="info-btn"><i class="fas fa-info-circle"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="photo-item" data-category="landscapes">
+                    <img src="images/photography/landscape2.jpg" alt="Pôr do sol na praia">
+                    <div class="photo-overlay">
+                        <div class="photo-info">
+                            <h3>Costa do Pacífico</h3>
+                            <p>Califórnia, 2024</p>
+                            <div class="photo-actions">
+                                <button class="view-btn" data-image="images/photography/landscape2.jpg"><i class="fas fa-eye"></i></button>
+                                <button class="info-btn"><i class="fas fa-info-circle"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cidades -->
+                <div class="photo-item" data-category="cities">
+                    <img src="images/photography/city1.jpg" alt="Skyline de Nova York">
+                    <div class="photo-overlay">
+                        <div class="photo-info">
+                            <h3>Manhattan Skyline</h3>
+                            <p>Nova York, 2023</p>
+                            <div class="photo-actions">
+                                <button class="view-btn" data-image="images/photography/city1.jpg"><i class="fas fa-eye"></i></button>
+                                <button class="info-btn"><i class="fas fa-info-circle"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="photo-item" data-category="cities">
+                    <img src="images/photography/city2.jpg" alt="Ruas de Paris">
+                    <div class="photo-overlay">
+                        <div class="photo-info">
+                            <h3>Montmartre</h3>
+                            <p>Paris, 2023</p>
+                            <div class="photo-actions">
+                                <button class="view-btn" data-image="images/photography/city2.jpg"><i class="fas fa-eye"></i></button>
+                                <button class="info-btn"><i class="fas fa-info-circle"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cultura -->
+                <div class="photo-item" data-category="culture">
+                    <img src="images/photography/culture1.jpg" alt="Templo tradicional">
+                    <div class="photo-overlay">
+                        <div class="photo-info">
+                            <h3>Templo Sensoji</h3>
+                            <p>Tóquio, 2024</p>
+                            <div class="photo-actions">
+                                <button class="view-btn" data-image="images/photography/culture1.jpg"><i class="fas fa-eye"></i></button>
+                                <button class="info-btn"><i class="fas fa-info-circle"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="photo-item" data-category="culture">
+                    <img src="images/photography/culture2.jpg" alt="Mercado local">
+                    <div class="photo-overlay">
+                        <div class="photo-info">
+                            <h3>Mercado de Especiarias</h3>
+                            <p>Istambul, 2023</p>
+                            <div class="photo-actions">
+                                <button class="view-btn" data-image="images/photography/culture2.jpg"><i class="fas fa-eye"></i></button>
+                                <button class="info-btn"><i class="fas fa-info-circle"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Natureza -->
+                <div class="photo-item" data-category="nature">
+                    <img src="images/photography/nature1.jpg" alt="Floresta tropical">
+                    <div class="photo-overlay">
+                        <div class="photo-info">
+                            <h3>Amazônia</h3>
+                            <p>Brasil, 2024</p>
+                            <div class="photo-actions">
+                                <button class="view-btn" data-image="images/photography/nature1.jpg"><i class="fas fa-eye"></i></button>
+                                <button class="info-btn"><i class="fas fa-info-circle"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="photo-item" data-category="nature">
+                    <img src="images/photography/nature2.jpg" alt="Aurora boreal">
+                    <div class="photo-overlay">
+                        <div class="photo-info">
+                            <h3>Aurora Boreal</h3>
+                            <p>Islândia, 2023</p>
+                            <div class="photo-actions">
+                                <button class="view-btn" data-image="images/photography/nature2.jpg"><i class="fas fa-eye"></i></button>
+                                <button class="info-btn"><i class="fas fa-info-circle"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Aventura -->
+                <div class="photo-item" data-category="adventure">
+                    <img src="images/photography/adventure1.jpg" alt="Escalada em montanha">
+                    <div class="photo-overlay">
+                        <div class="photo-info">
+                            <h3>Escalada nos Andes</h3>
+                            <p>Peru, 2024</p>
+                            <div class="photo-actions">
+                                <button class="view-btn" data-image="images/photography/adventure1.jpg"><i class="fas fa-eye"></i></button>
+                                <button class="info-btn"><i class="fas fa-info-circle"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="photo-item" data-category="adventure">
+                    <img src="images/photography/adventure2.jpg" alt="Mergulho">
+                    <div class="photo-overlay">
+                        <div class="photo-info">
+                            <h3>Grande Barreira de Coral</h3>
+                            <p>Austrália, 2023</p>
+                            <div class="photo-actions">
+                                <button class="view-btn" data-image="images/photography/adventure2.jpg"><i class="fas fa-eye"></i></button>
+                                <button class="info-btn"><i class="fas fa-info-circle"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Load More Button -->
+            <div class="load-more">
+                <button class="btn btn-primary">Carregar Mais Fotos</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Travel Blog Section -->
+    <section class="travel-blog">
+        <div class="container">
+            <h2 class="section-title">Diário de Viagens</h2>
+            <div class="travel-posts">
+                <article class="travel-post">
+                    <div class="post-image">
+                        <img src="images/photography/blog1.jpg" alt="Viagem ao Japão">
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span class="post-date"><i class="fas fa-calendar"></i> 20 Jul 2025</span>
+                            <span class="post-location"><i class="fas fa-map-marker-alt"></i> Japão</span>
+                        </div>
+                        <h3>15 Dias Explorando o Japão</h3>
+                        <p>Uma jornada incrível pela terra do sol nascente, descobrindo a harmonia entre tradição e modernidade.</p>
+                        <a href="#" class="read-more">Ler história completa</a>
+                    </div>
+                </article>
+
+                <article class="travel-post">
+                    <div class="post-image">
+                        <img src="images/photography/blog2.jpg" alt="Aventura na Patagônia">
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span class="post-date"><i class="fas fa-calendar"></i> 10 Jul 2025</span>
+                            <span class="post-location"><i class="fas fa-map-marker-alt"></i> Patagônia</span>
+                        </div>
+                        <h3>Trekking na Patagônia</h3>
+                        <p>Desafios e recompensas de uma das aventuras mais épicas da América do Sul.</p>
+                        <a href="#" class="read-more">Ler história completa</a>
+                    </div>
+                </article>
+
+                <article class="travel-post">
+                    <div class="post-image">
+                        <img src="images/photography/blog3.jpg" alt="Exploração urbana na Europa">
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span class="post-date"><i class="fas fa-calendar"></i> 5 Jul 2025</span>
+                            <span class="post-location"><i class="fas fa-map-marker-alt"></i> Europa</span>
+                        </div>
+                        <h3>Roteiro de 30 Dias pela Europa</h3>
+                        <p>Descobrindo joias escondidas em cidades históricas e capturando sua essência única.</p>
+                        <a href="#" class="read-more">Ler história completa</a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Photo Modal -->
+    <div id="photoModal" class="photo-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <img id="modalImage" src="" alt="">
+            <div class="modal-nav">
+                <button id="prevBtn" class="nav-btn"><i class="fas fa-chevron-left"></i></button>
+                <button id="nextBtn" class="nav-btn"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 José - Técnico de Sistemas. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/photography.js"></script>
+</body>
+</html>

@@ -1,0 +1,278 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import Image from 'next/image'
+import { MapPin, Calendar, X, ChevronLeft, ChevronRight, Search, Filter } from 'lucide-react'
+
+interface CloudinaryPhoto {
+  id: string
+  url: string
+  thumbnail: string
+  title: string
+  location: string
+  description: string
+  tags: string[]
+  createdAt: string
+  width: number
+  height: number
+}
+
+export default function PhotographyPage() {
+  const [photos, setPhotos] = useState<CloudinaryPhoto[]>([])
+  const [loading, setLoading] = useState(true)
+  const [selectedPhoto, setSelectedPhoto] = useState<CloudinaryPhoto | null>(null)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [selectedLocation, setSelectedLocation] = useState('')
+
+  useEffect(() => {
+    loadPhotos()
+  }, [])
+
+  const loadPhotos = async () => {
+    try {
+      setLoading(true)
+      const response = await fetch('/api/cloudinary-photos')
+      if (!response.ok) throw new Error('Erro ao carregar fotos')
+      
+      const data = await response.json()
+      // Filtrar apenas fotos com localização definida para a galeria pública
+      setPhotos(data.photos.filter((photo: CloudinaryPhoto) => photo.location && photo.location !== 'Sem localização'))
+    } catch (error) {
+      console.error('Erro ao carregar fotos:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Filtrar fotos
+  const filteredPhotos = photos.filter(photo => {
+    const matchesSearch = photo.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         photo.description.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesLocation = !selectedLocation || photo.location === selectedLocation
+    return matchesSearch && matchesLocation
+  })
+
+  // Obter localizações únicas
+  const locations = Array.from(new Set(photos.map(photo => photo.location).filter(Boolean)))
+
+  // Navegação no lightbox
+  const nextPhoto = () => {
+    if (!selectedPhoto) return
+    const currentIndex = filteredPhotos.findIndex(p => p.id === selectedPhoto.id)
+    const nextIndex = (currentIndex + 1) % filteredPhotos.length
+    setSelectedPhoto(filteredPhotos[nextIndex])
+  }
+
+  const prevPhoto = () => {
+    if (!selectedPhoto) return
+    const currentIndex = filteredPhotos.findIndex(p => p.id === selectedPhoto.id)
+    const prevIndex = currentIndex === 0 ? filteredPhotos.length - 1 : currentIndex - 1
+    setSelectedPhoto(filteredPhotos[prevIndex])
+  }
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (!selectedPhoto) return
+      
+      switch (e.key) {
+        case 'Escape':
+          setSelectedPhoto(null)
+          break
+        case 'ArrowRight':
+          nextPhoto()
+          break
+        case 'ArrowLeft':
+          prevPhoto()
+          break
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyPress)
+    return () => window.removeEventListener('keydown', handleKeyPress)
+  }, [selectedPhoto, filteredPhotos])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-gray-600 dark:text-gray-400">Carregando galeria...</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            Galeria de Fotografia
+          </h1>
+          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+            Uma coleção de momentos capturados ao redor do mundo. Cada imagem conta uma história única dos lugares que visitei.
+          </p>
+        </div>
+
+        {/* Filtros */}
+        <div className="mb-8 space-y-4 lg:space-y-0 lg:flex lg:items-center lg:justify-between">
+          <div className="flex flex-col lg:flex-row gap-4 flex-1 max-w-2xl">
+            {/* Busca */}
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="Buscar fotos..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white"
+              />
+            </div>
+
+            {/* Filtro por localização */}
+            <div className="relative">
+              <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <select
+                value={selectedLocation}
+                onChange={(e) => setSelectedLocation(e.target.value)}
+                className="pl-10 pr-8 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white min-w-[200px]"
+              >
+                <option value="">Todos os lugares</option>
+                {locations.map(location => (
+                  <option key={location} value={location}>{location}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div className="text-sm text-gray-500 dark:text-gray-400">
+            {filteredPhotos.length} {filteredPhotos.length === 1 ? 'foto' : 'fotos'}
+          </div>
+        </div>
+
+        {/* Grid de Fotos */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {filteredPhotos.map((photo) => (
+            <div
+              key={photo.id}
+              className="group cursor-pointer bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              onClick={() => setSelectedPhoto(photo)}
+            >
+              <div className="aspect-square relative">
+                <Image
+                  src={photo.thumbnail}
+                  alt={photo.title}
+                  fill
+                  className="object-cover transition-transform duration-300 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity duration-300" />
+              </div>
+              
+              <div className="p-4">
+                <h3 className="font-semibold text-gray-900 dark:text-white text-sm mb-2 line-clamp-2">
+                  {photo.title}
+                </h3>
+                
+                <div className="flex items-center text-gray-500 dark:text-gray-400 text-xs mb-2">
+                  <MapPin className="w-3 h-3 mr-1" />
+                  <span className="truncate">{photo.location}</span>
+                </div>
+                
+                <div className="flex items-center text-gray-400 dark:text-gray-500 text-xs">
+                  <Calendar className="w-3 h-3 mr-1" />
+                  <span>{new Date(photo.createdAt).toLocaleDateString('pt-BR')}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Estado vazio */}
+        {filteredPhotos.length === 0 && !loading && (
+          <div className="text-center py-16">
+            <div className="text-gray-400 mb-4">
+              <Search className="w-16 h-16 mx-auto mb-4" />
+            </div>
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+              Nenhuma foto encontrada
+            </h3>
+            <p className="text-gray-500 dark:text-gray-400">
+              Tente ajustar os filtros de busca ou selecionar um local diferente.
+            </p>
+          </div>
+        )}
+
+        {/* Lightbox */}
+        {selectedPhoto && (
+          <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4">
+            {/* Botão Fechar */}
+            <button
+              onClick={() => setSelectedPhoto(null)}
+              className="absolute top-4 right-4 text-white hover:text-gray-300 z-10"
+            >
+              <X className="w-8 h-8" />
+            </button>
+
+            {/* Navegação anterior */}
+            <button
+              onClick={prevPhoto}
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 z-10"
+            >
+              <ChevronLeft className="w-8 h-8" />
+            </button>
+
+            {/* Navegação próxima */}
+            <button
+              onClick={nextPhoto}
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 z-10"
+            >
+              <ChevronRight className="w-8 h-8" />
+            </button>
+
+            {/* Imagem */}
+            <div className="max-w-4xl max-h-full w-full h-full flex items-center justify-center">
+              <div className="relative">
+                <Image
+                  src={selectedPhoto.url}
+                  alt={selectedPhoto.title}
+                  width={selectedPhoto.width}
+                  height={selectedPhoto.height}
+                  className="max-w-full max-h-[80vh] object-contain"
+                />
+                
+                {/* Informações da foto */}
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6">
+                  <h3 className="text-white text-xl font-semibold mb-2">
+                    {selectedPhoto.title}
+                  </h3>
+                  
+                  <div className="flex items-center text-gray-300 mb-2">
+                    <MapPin className="w-4 h-4 mr-2" />
+                    <span>{selectedPhoto.location}</span>
+                  </div>
+                  
+                  {selectedPhoto.description && (
+                    <p className="text-gray-300 text-sm mb-2">
+                      {selectedPhoto.description}
+                    </p>
+                  )}
+                  
+                  <div className="flex items-center text-gray-400 text-sm">
+                    <Calendar className="w-4 h-4 mr-2" />
+                    <span>{new Date(selectedPhoto.createdAt).toLocaleDateString('pt-BR')}</span>
+                    <span className="mx-2">•</span>
+                    <span>{selectedPhoto.width} × {selectedPhoto.height}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
