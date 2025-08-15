@@ -11,7 +11,7 @@ export function Footer() {
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
               <Image
-                src="https://res.cloudinary.com/dvqzo7snh/image/upload/v1/portfolio/logo"
+                src="https://res.cloudinary.com/dvqzo7snh/image/upload/v1755253565/portfolio/portfolio/logo.png"
                 alt="José Leite - Programador Web"
                 width={32}
                 height={32}

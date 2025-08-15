@@ -79,7 +79,7 @@ export function Hero() {
               <div className="w-80 h-80 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 p-1 shadow-2xl">
                 <div className="w-full h-full rounded-full bg-white dark:bg-gray-800 flex items-center justify-center overflow-hidden">
                   <Image
-                    src="https://res.cloudinary.com/dvqzo7snh/image/upload/v1/portfolio/fotojose"
+                    src="https://res.cloudinary.com/dvqzo7snh/image/upload/v1755253564/portfolio/portfolio/fotojose.jpg"
                     alt="José Leite - Programador Web"
                     width={300}
                     height={300}

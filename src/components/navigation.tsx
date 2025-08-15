@@ -63,7 +63,7 @@ export function Navigation() {
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
             <Image
-              src="https://res.cloudinary.com/dvqzo7snh/image/upload/v1/portfolio/logo"
+              src="https://res.cloudinary.com/dvqzo7snh/image/upload/v1755253565/portfolio/portfolio/logo.png"
               alt="José - Técnico de Sistemas"
               width={50}
               height={50}
