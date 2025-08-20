@@ -27,6 +27,14 @@ export function Navigation() {
   const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (href.startsWith('#')) {
       e.preventDefault()
+      
+      // Se não estamos na página inicial, navegar para a página inicial primeiro
+      if (window.location.pathname !== '/') {
+        window.location.href = '/' + href
+        return
+      }
+      
+      // Se estamos na página inicial, fazer scroll suave
       const element = document.querySelector(href)
       if (element) {
         element.scrollIntoView({

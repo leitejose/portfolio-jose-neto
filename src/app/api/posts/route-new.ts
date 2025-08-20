@@ -27,10 +27,7 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    console.log('📥 API recebeu body:', body)
-    
     const { title, content, excerpt, published = false, featured = false, coverImage } = body
-    console.log('🖼️ API extraiu coverImage:', coverImage)
 
     // Gerar slug
     const slug = title
@@ -39,10 +36,7 @@ export async function POST(req: NextRequest) {
       .replace(/\s+/g, '-')
       .trim()
 
-    const now = new Date().toISOString()
-    
     const postData = {
-      id: `post_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`, // Gerar ID único
       title,
       content,
       excerpt,
@@ -50,12 +44,11 @@ export async function POST(req: NextRequest) {
       published,
       featured,
       coverImage,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      publishedAt: published ? new Date().toISOString() : null,
       views: 0,
-      readTime: Math.ceil(content.split(' ').length / 200),
-      createdAt: now,
-      updatedAt: now,
-      publishedAt: published ? now : null,
-      authorId: 'jose_leite_admin' // ID do usuário José Leite
+      readTime: Math.ceil(content.split(' ').length / 200)
     }
 
     const { data: post, error } = await supabase

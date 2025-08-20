@@ -48,10 +48,17 @@ export default function NewProjectPage() {
     setMessage('')
 
     try {
-      // Converte a URL da imagem se for do Google Drive
+      // Converte a URL da imagem se for do Google Drive e mapeia os campos
       const dataToSubmit = {
-        ...formData,
-        imageUrl: convertGoogleDriveUrl(formData.imageUrl)
+        title: formData.title,
+        description: formData.description,
+        content: formData.longDescription,
+        imageUrl: convertGoogleDriveUrl(formData.imageUrl),
+        demoUrl: formData.projectUrl,
+        repoUrl: formData.githubUrl,
+        featured: formData.featured,
+        published: true,
+        order: 0
       }
 
       const response = await fetch('/api/projects', {

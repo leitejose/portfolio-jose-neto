@@ -1,16 +1,22 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
+import { remark } from 'remark'
+import html from 'remark-html'
+import { convertGoogleDriveUrl } from '@/lib/image-utils'
+import CloudinaryUploadWidget from '@/components/cloudinary-upload-widget'
 import { 
   ArrowLeft, 
   Save, 
   Eye, 
   Upload,
   X,
-  Plus
+  Plus,
+  Edit3,
+  FileText
 } from 'lucide-react'
 
 interface PostForm {
@@ -22,12 +28,15 @@ interface PostForm {
   status: 'draft' | 'published' | 'scheduled'
   featuredImage: string
   publishDate: string
+  fontStyle: 'academic' | 'modern' | 'mono' | 'elegant'
 }
 
 export default function NewPostPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [tagInput, setTagInput] = useState('')
+  const [activeTab, setActiveTab] = useState<'edit' | 'preview'>('edit')
+  const [previewHtml, setPreviewHtml] = useState('')
   
   const [formData, setFormData] = useState<PostForm>({
     title: '',
@@ -37,7 +46,8 @@ export default function NewPostPage() {
     tags: [],
     status: 'draft',
     featuredImage: '',
-    publishDate: ''
+    publishDate: '',
+    fontStyle: 'academic'
   })
 
   const categories = [
@@ -53,7 +63,46 @@ export default function NewPostPage() {
     'Tutoriais'
   ]
 
+  const fontOptions = [
+    { value: 'academic', label: 'Acadêmica (Times New Roman)', class: 'font-academic' },
+    { value: 'modern', label: 'Moderna (Sans-serif)', class: 'font-modern' },
+    { value: 'mono', label: 'Monoespaçada (Courier)', class: 'font-mono' },
+    { value: 'elegant', label: 'Elegante (Georgia)', class: 'font-elegant' }
+  ]
+
+  const getFontClass = (fontStyle: string) => {
+    const font = fontOptions.find(f => f.value === fontStyle)
+    return font?.class || 'font-academic'
+  }
+
+  // Função para processar Markdown
+  const processMarkdown = async (content: string) => {
+    try {
+      const processedContent = await remark()
+        .use(html)
+        .process(content)
+      return processedContent.toString()
+    } catch (error) {
+      console.error('Erro ao processar Markdown:', error)
+      return content
+    }
+  }
+
+  // Atualizar preview quando o conteúdo mudar
+  useEffect(() => {
+    if (formData.content) {
+      processMarkdown(formData.content).then(setPreviewHtml)
+    } else {
+      setPreviewHtml('')
+    }
+  }, [formData.content])
+
   const handleInputChange = (field: keyof PostForm, value: string) => {
+    // Converter automaticamente links do Google Drive para formato direto
+    if (field === 'featuredImage' && value.includes('drive.google.com')) {
+      value = convertGoogleDriveUrl(value)
+    }
+    
     setFormData(prev => ({
       ...prev,
       [field]: value
@@ -89,30 +138,61 @@ export default function NewPostPage() {
     setLoading(true)
 
     try {
-      // Implementar integração com Supabase
-      console.log('Salvando post:', formData)
-      
-      // Simular delay da API
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      const postData = {
+        title: formData.title,
+        content: formData.content,
+        excerpt: formData.excerpt,
+        published: formData.status === 'published',
+        featured: false,
+        coverImage: formData.featuredImage || null
+      }
+
+      console.log('📤 Enviando dados para API:', postData)
+      console.log('🖼️ featuredImage:', formData.featuredImage)
+      console.log('🖼️ coverImage:', postData.coverImage)
+
+      const response = await fetch('/api/posts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(postData)
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Erro ao salvar post')
+      }
+
+      const result = await response.json()
+      console.log('Post salvo com sucesso:', result)
       
       // Redirecionar para a lista de posts
       router.push('/admin/posts')
     } catch (error) {
       console.error('Erro ao salvar post:', error)
-      alert('Erro ao salvar o post. Tente novamente.')
+      alert(`Erro ao salvar o post: ${error instanceof Error ? error.message : 'Erro desconhecido'}`)
     } finally {
       setLoading(false)
     }
   }
 
   const handleSaveDraft = async () => {
-    setFormData(prev => ({ ...prev, status: 'draft' }))
-    await handleSubmit(new Event('submit') as any)
+    const updatedFormData = { ...formData, status: 'draft' as const }
+    setFormData(updatedFormData)
+    
+    // Trigger submit with draft status
+    const event = new Event('submit', { bubbles: true, cancelable: true })
+    await handleSubmit(event as any)
   }
 
   const handlePublish = async () => {
-    setFormData(prev => ({ ...prev, status: 'published' }))
-    await handleSubmit(new Event('submit') as any)
+    const updatedFormData = { ...formData, status: 'published' as const }
+    setFormData(updatedFormData)
+    
+    // Trigger submit with published status
+    const event = new Event('submit', { bubbles: true, cancelable: true })
+    await handleSubmit(event as any)
   }
 
   return (
@@ -193,26 +273,77 @@ export default function NewPostPage() {
             />
           </div>
 
-          {/* Conteúdo */}
+          {/* Conteúdo com Preview */}
           <div>
-            <label htmlFor="content" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">
               Conteúdo *
             </label>
-            <textarea
-              id="content"
-              value={formData.content}
-              onChange={(e) => handleInputChange('content', e.target.value)}
-              placeholder="Escreva o conteúdo do seu post aqui... (Markdown suportado)"
-              required
-              rows={15}
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical font-mono text-sm"
-            />
-            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-              Você pode usar Markdown para formatar o texto. Exemplo: **negrito**, *itálico*, `código`
-            </p>
+            
+            {/* Tabs */}
+            <div className="flex border-b border-gray-200 dark:border-gray-600 mb-4">
+              <button
+                type="button"
+                onClick={() => setActiveTab('edit')}
+                className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+                  activeTab === 'edit'
+                    ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
+                }`}
+              >
+                <Edit3 className="h-4 w-4 inline mr-2" />
+                Editar
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab('preview')}
+                className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+                  activeTab === 'preview'
+                    ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
+                }`}
+              >
+                <Eye className="h-4 w-4 inline mr-2" />
+                Preview
+              </button>
+            </div>
+
+            {/* Conteúdo das tabs */}
+            <div className="min-h-[400px]">
+              {activeTab === 'edit' ? (
+                <div>
+                  <textarea
+                    id="content"
+                    value={formData.content}
+                    onChange={(e) => handleInputChange('content', e.target.value)}
+                    placeholder="Escreva o conteúdo do seu post aqui... (Markdown suportado)"
+                    required
+                    rows={20}
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical font-mono text-sm"
+                  />
+                  <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                    Você pode usar Markdown para formatar o texto. Exemplo: **negrito**, *itálico*, `código`, ## Título
+                  </p>
+                </div>
+              ) : (
+                <div className="border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 p-6 min-h-[400px]">
+                  {previewHtml ? (
+                    <div 
+                      className={`academic-content prose prose-lg dark:prose-invert max-w-none ${getFontClass(formData.fontStyle)}`}
+                      dangerouslySetInnerHTML={{ __html: previewHtml }}
+                    />
+                  ) : (
+                    <div className="text-gray-500 dark:text-gray-400 text-center py-20">
+                      <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                      <p>Nenhum conteúdo para visualizar</p>
+                      <p className="text-sm">Escreva algo na aba &ldquo;Editar&rdquo; para ver o preview</p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Categoria */}
             <div>
               <label htmlFor="category" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -248,6 +379,25 @@ export default function NewPostPage() {
                 <option value="draft">Rascunho</option>
                 <option value="published">Publicado</option>
                 <option value="scheduled">Agendado</option>
+              </select>
+            </div>
+
+            {/* Estilo de Fonte */}
+            <div>
+              <label htmlFor="fontStyle" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Estilo de Fonte
+              </label>
+              <select
+                id="fontStyle"
+                value={formData.fontStyle}
+                onChange={(e) => handleInputChange('fontStyle', e.target.value as PostForm['fontStyle'])}
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                {fontOptions.map(font => (
+                  <option key={font.value} value={font.value}>
+                    {font.label}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -296,16 +446,34 @@ export default function NewPostPage() {
           {/* Imagem Destacada */}
           <div>
             <label htmlFor="featuredImage" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              URL da Imagem Destacada
+              Imagem Destacada
             </label>
-            <input
-              type="url"
-              id="featuredImage"
-              value={formData.featuredImage}
-              onChange={(e) => handleInputChange('featuredImage', e.target.value)}
-              placeholder="https://exemplo.com/imagem.jpg"
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
+            <div className="space-y-3">
+              {/* Upload do Cloudinary */}
+              <CloudinaryUploadWidget
+                onUploadAction={(imageUrl, publicId) => {
+                  setFormData(prev => ({
+                    ...prev,
+                    featuredImage: imageUrl
+                  }))
+                }}
+                preset="ml_default"
+                folder="blog-covers"
+                buttonText="Fazer Upload da Imagem"
+                className="w-full"
+              />
+              
+              {/* Campo de URL manual */}
+              <div className="text-center text-sm text-gray-500 dark:text-gray-400">ou</div>
+              <input
+                type="url"
+                id="featuredImage"
+                value={formData.featuredImage}
+                onChange={(e) => handleInputChange('featuredImage', e.target.value)}
+                placeholder="Cole a URL da imagem aqui..."
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
             {formData.featuredImage && (
               <div className="mt-3">
                 <Image

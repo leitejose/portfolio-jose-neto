@@ -18,23 +18,18 @@ import {
 interface Post {
   id: string
   title: string
-  excerpt: string | null
-  published: boolean
   slug: string
+  excerpt: string | null
+  content: string
   coverImage: string | null
+  published: boolean
+  featured: boolean
   views: number
+  readTime: number | null
   createdAt: string
+  updatedAt: string
   publishedAt: string | null
-  author: {
-    name: string | null
-    email: string
-  }
-  categories: Array<{
-    category: {
-      id: string
-      name: string
-    }
-  }>
+  authorId: string | null
 }
 
 export default function PostsPage() {
@@ -53,7 +48,7 @@ export default function PostsPage() {
           throw new Error('Erro ao carregar posts')
         }
         const data = await response.json()
-        setPosts(data)
+        setPosts(data.posts || [])
       } catch (error: any) {
         console.error('Erro ao carregar posts:', error)
         setError(error.message)
@@ -225,7 +220,7 @@ export default function PostsPage() {
                       Status
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                      Categoria
+                      Tipo
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                       Data
@@ -256,14 +251,9 @@ export default function PostsPage() {
                             <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
                               {post.title}
                             </p>
-                            {post.excerpt && (
-                              <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
-                                {post.excerpt}
-                              </p>
-                            )}
                             <div className="flex items-center mt-1 text-xs text-gray-400">
                               <User className="h-3 w-3 mr-1" />
-                              {post.author.name || post.author.email}
+                              {post.authorId}
                             </div>
                           </div>
                         </div>
@@ -274,10 +264,7 @@ export default function PostsPage() {
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                        {post.categories.length > 0 
-                          ? post.categories[0].category.name 
-                          : 'Sem categoria'
-                        }
+                        {post.featured ? 'Destaque' : 'Normal'}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                         <div className="flex items-center">

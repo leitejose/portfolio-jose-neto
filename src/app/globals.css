@@ -168,3 +168,263 @@ html {
   );
   background-size: 1000px 100%;
 }
+
+/* Academic Content Styles */
+.academic-content {
+  font-family: 'Times New Roman', 'Georgia', serif;
+  line-height: 1.8;
+  color: #2d3748;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.academic-content h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 2rem 0 1rem 0;
+  color: #1a202c;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 0.5rem;
+}
+
+.academic-content h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 1.8rem 0 0.8rem 0;
+  color: #2d3748;
+}
+
+.academic-content h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 1.5rem 0 0.6rem 0;
+  color: #4a5568;
+}
+
+.academic-content p {
+  margin: 1.2rem 0;
+  text-align: justify;
+  font-size: 1.1rem;
+  text-indent: 1.5rem;
+}
+
+.academic-content p:first-of-type {
+  text-indent: 0;
+  font-weight: 500;
+}
+
+.academic-content ul, 
+.academic-content ol {
+  margin: 1rem 0;
+  padding-left: 2rem;
+}
+
+.academic-content li {
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+}
+
+.academic-content blockquote {
+  border-left: 4px solid #cbd5e0;
+  padding-left: 1.5rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  color: #4a5568;
+  background-color: #f7fafc;
+  padding: 1rem 1.5rem;
+}
+
+.academic-content code {
+  background-color: #edf2f7;
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+}
+
+.academic-content pre {
+  background-color: #2d3748;
+  color: #e2e8f0;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.academic-content pre code {
+  background-color: transparent;
+  padding: 0;
+  color: inherit;
+}
+
+.academic-content strong {
+  font-weight: 600;
+  color: #1a202c;
+}
+
+.academic-content em {
+  font-style: italic;
+  color: #4a5568;
+}
+
+.academic-content a {
+  color: #3182ce;
+  text-decoration: underline;
+  text-decoration-color: #90cdf4;
+}
+
+.academic-content a:hover {
+  color: #2c5282;
+  text-decoration-color: #3182ce;
+}
+
+.academic-content img {
+  margin: 2rem auto;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.academic-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+}
+
+.academic-content th,
+.academic-content td {
+  border: 1px solid #e2e8f0;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.academic-content th {
+  background-color: #f7fafc;
+  font-weight: 600;
+}
+
+/* Dark mode styles for academic content */
+@media (prefers-color-scheme: dark) {
+  .academic-content {
+    color: #e2e8f0;
+  }
+  
+  .academic-content h1 {
+    color: #f7fafc;
+    border-bottom-color: #4a5568;
+  }
+  
+  .academic-content h2 {
+    color: #e2e8f0;
+  }
+  
+  .academic-content h3 {
+    color: #cbd5e0;
+  }
+  
+  .academic-content blockquote {
+    background-color: #2d3748;
+    border-left-color: #4a5568;
+    color: #cbd5e0;
+  }
+  
+  .academic-content code {
+    background-color: #4a5568;
+    color: #e2e8f0;
+  }
+  
+  .academic-content strong {
+    color: #f7fafc;
+  }
+  
+  .academic-content em {
+    color: #cbd5e0;
+  }
+  
+  .academic-content th {
+    background-color: #4a5568;
+  }
+  
+  .academic-content th,
+  .academic-content td {
+    border-color: #4a5568;
+  }
+}
+
+.dark .academic-content {
+  color: #e2e8f0;
+}
+
+.dark .academic-content h1 {
+  color: #f7fafc;
+  border-bottom-color: #4a5568;
+}
+
+.dark .academic-content h2 {
+  color: #e2e8f0;
+}
+
+.dark .academic-content h3 {
+  color: #cbd5e0;
+}
+
+.dark .academic-content blockquote {
+  background-color: #2d3748;
+  border-left-color: #4a5568;
+  color: #cbd5e0;
+}
+
+.dark .academic-content code {
+  background-color: #4a5568;
+  color: #e2e8f0;
+}
+
+.dark .academic-content strong {
+  color: #f7fafc;
+}
+
+.dark .academic-content em {
+  color: #cbd5e0;
+}
+
+.dark .academic-content th {
+  background-color: #4a5568;
+}
+
+.dark .academic-content th,
+.dark .academic-content td {
+  border-color: #4a5568;
+}
+
+/* Font Style Classes */
+.font-academic {
+  font-family: 'Times New Roman', 'Times', serif !important;
+}
+
+.font-modern {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif !important;
+}
+
+.font-mono {
+  font-family: 'Courier New', 'Courier', monospace !important;
+}
+
+.font-elegant {
+  font-family: 'Georgia', 'Times New Roman', serif !important;
+}
+
+/* Apply font to all content within font containers */
+.font-academic * {
+  font-family: inherit !important;
+}
+
+.font-modern * {
+  font-family: inherit !important;
+}
+
+.font-mono * {
+  font-family: inherit !important;
+}
+
+.font-elegant * {
+  font-family: inherit !important;
+}

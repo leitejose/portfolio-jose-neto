@@ -48,7 +48,14 @@ export default function EditProjectPage({ params }: EditProjectPageProps) {
       const response = await fetch(`/api/projects/${id}`)
       if (response.ok) {
         const projectData = await response.json()
-        setProject(projectData)
+        // Mapear os campos da API para o formato do formulário
+        setProject({
+          ...projectData,
+          longDescription: projectData.content || '',
+          projectUrl: projectData.demoUrl || '',
+          githubUrl: projectData.repoUrl || '',
+          technologies: projectData.technologies?.map((t: any) => t.technology.name) || []
+        })
       } else {
         setMessage('Erro ao carregar projeto')
       }
@@ -74,12 +81,25 @@ export default function EditProjectPage({ params }: EditProjectPageProps) {
     setMessage('')
 
     try {
+      // Mapear os campos do formulário para o formato da API
+      const dataToSubmit = {
+        title: project.title,
+        description: project.description,
+        content: project.longDescription,
+        imageUrl: project.imageUrl,
+        demoUrl: project.projectUrl,
+        repoUrl: project.githubUrl,
+        featured: project.featured,
+        published: true,
+        order: 0
+      }
+
       const response = await fetch(`/api/projects/${resolvedParams.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(project),
+        body: JSON.stringify(dataToSubmit),
       })
 
       if (response.ok) {

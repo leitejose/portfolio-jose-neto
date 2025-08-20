@@ -4,6 +4,10 @@ import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
+import { remark } from 'remark'
+import html from 'remark-html'
+import { convertGoogleDriveUrl } from '@/lib/image-utils'
+import CloudinaryUploadWidget from '@/components/cloudinary-upload-widget'
 import { 
   ArrowLeft, 
   Save, 
@@ -11,70 +15,10 @@ import {
   Upload,
   X,
   Plus,
-  Trash2
+  Trash2,
+  Edit3,
+  FileText
 } from 'lucide-react'
-
-// Mock data - substituir pela integração com Supabase
-const mockPosts: { [key: string]: PostForm } = {
-  '1': {
-    title: 'Como Configurar um Servidor Windows',
-    content: `# Como Configurar um Servidor Windows
-
-## Introdução
-Este guia completo irá ajudá-lo a configurar um servidor Windows Server 2022 do zero.
-
-## Requisitos do Sistema
-- Windows Server 2022
-- Mínimo de 4GB RAM
-- 50GB de espaço em disco
-
-## Passo a Passo
-
-### 1. Instalação do Windows Server
-Lorem ipsum dolor sit amet, consectetur adipiscing elit...
-
-### 2. Configuração do Active Directory
-Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...
-
-### 3. Configuração de Políticas de Grupo
-Ut enim ad minim veniam, quis nostrud exercitation...
-
-## Conclusão
-Com estes passos, você terá um servidor Windows devidamente configurado.`,
-    excerpt: 'Guia completo para configuração de servidor Windows Server 2022 com Active Directory...',
-    category: 'Sistemas',
-    tags: ['windows', 'servidor', 'active-directory'],
-    status: 'published',
-    featuredImage: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&h=400&fit=crop',
-    publishDate: '2024-01-15T10:00'
-  },
-  '2': {
-    title: 'Backup Automatizado com PowerShell',
-    content: `# Backup Automatizado com PowerShell
-
-## Introdução
-Neste tutorial, aprenderemos a criar scripts PowerShell para automatizar backups.
-
-## Script Básico
-\`\`\`powershell
-# Script de backup básico
-$sourceFolder = "C:\\Data"
-$destinationFolder = "D:\\Backup"
-$date = Get-Date -Format "yyyy-MM-dd"
-
-Copy-Item -Path $sourceFolder -Destination "$destinationFolder\\Backup_$date" -Recurse
-\`\`\`
-
-## Agendamento
-Para agendar o script, use o Task Scheduler...`,
-    excerpt: 'Scripts PowerShell para automatizar backups de sistema e dados importantes...',
-    category: 'Automação',
-    tags: ['powershell', 'backup', 'automação'],
-    status: 'draft',
-    featuredImage: '',
-    publishDate: ''
-  }
-}
 
 interface PostForm {
   title: string
@@ -85,6 +29,7 @@ interface PostForm {
   status: 'draft' | 'published' | 'scheduled'
   featuredImage: string
   publishDate: string
+  fontStyle: 'academic' | 'modern' | 'mono' | 'elegant'
 }
 
 export default function EditPostPage() {
@@ -93,7 +38,10 @@ export default function EditPostPage() {
   const postId = params.id as string
   
   const [loading, setLoading] = useState(false)
+  const [notFound, setNotFound] = useState(false)
   const [tagInput, setTagInput] = useState('')
+  const [activeTab, setActiveTab] = useState<'edit' | 'preview'>('edit')
+  const [previewHtml, setPreviewHtml] = useState('')
   const [postExists, setPostExists] = useState(true)
   
   const [formData, setFormData] = useState<PostForm>({
@@ -104,7 +52,8 @@ export default function EditPostPage() {
     tags: [],
     status: 'draft',
     featuredImage: '',
-    publishDate: ''
+    publishDate: '',
+    fontStyle: 'academic'
   })
 
   const categories = [
@@ -120,32 +69,85 @@ export default function EditPostPage() {
     'Tutoriais'
   ]
 
+  const fontOptions = [
+    { value: 'academic', label: 'Acadêmica (Times New Roman)', class: 'font-academic' },
+    { value: 'modern', label: 'Moderna (Sans-serif)', class: 'font-modern' },
+    { value: 'mono', label: 'Monoespaçada (Courier)', class: 'font-mono' },
+    { value: 'elegant', label: 'Elegante (Georgia)', class: 'font-elegant' }
+  ]
+
+  const getFontClass = (fontStyle: string) => {
+    const font = fontOptions.find(f => f.value === fontStyle)
+    return font?.class || 'font-academic'
+  }
+
+  // Função para processar Markdown
+  const processMarkdown = async (content: string) => {
+    try {
+      const processedContent = await remark()
+        .use(html)
+        .process(content)
+      return processedContent.toString()
+    } catch (error) {
+      console.error('Erro ao processar Markdown:', error)
+      return content
+    }
+  }
+
+  // Atualizar preview quando o conteúdo mudar
   useEffect(() => {
-    // Simular carregamento dos dados do post
+    if (formData.content) {
+      processMarkdown(formData.content).then(setPreviewHtml)
+    } else {
+      setPreviewHtml('')
+    }
+  }, [formData.content])
+
+  useEffect(() => {
+    // Carregar dados do post do Supabase
     const loadPost = async () => {
       setLoading(true)
       try {
-        // Simular delay da API
-        await new Promise(resolve => setTimeout(resolve, 500))
+        const response = await fetch(`/api/posts/${postId}`)
         
-        const post = mockPosts[postId]
-        if (post) {
-          setFormData(post)
+        if (response.ok) {
+          const post = await response.json()
+          setFormData({
+            title: post.title || '',
+            content: post.content || '',
+            excerpt: post.excerpt || '',
+            category: post.category || '',
+            tags: post.tags || [],
+            status: post.published ? 'published' : 'draft',
+            featuredImage: post.coverImage || '',
+            publishDate: post.publishedAt || '',
+            fontStyle: post.fontStyle || 'academic'
+          })
+        } else if (response.status === 404) {
+          setNotFound(true)
         } else {
-          setPostExists(false)
+          console.error('Erro ao carregar post')
+          setNotFound(true)
         }
       } catch (error) {
         console.error('Erro ao carregar post:', error)
-        setPostExists(false)
+        setNotFound(true)
       } finally {
         setLoading(false)
       }
     }
 
-    loadPost()
+    if (postId) {
+      loadPost()
+    }
   }, [postId])
 
   const handleInputChange = (field: keyof PostForm, value: string) => {
+    // Converter automaticamente links do Google Drive para formato direto
+    if (field === 'featuredImage' && value.includes('drive.google.com')) {
+      value = convertGoogleDriveUrl(value)
+    }
+    
     setFormData(prev => ({
       ...prev,
       [field]: value
@@ -181,11 +183,33 @@ export default function EditPostPage() {
     setLoading(true)
 
     try {
-      // Implementar integração com Supabase
-      console.log('Atualizando post:', postId, formData)
-      
-      // Simular delay da API
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      const postData = {
+        title: formData.title,
+        content: formData.content,
+        excerpt: formData.excerpt,
+        published: formData.status === 'published',
+        featured: false,
+        coverImage: formData.featuredImage || null
+      }
+
+      console.log('📤 Editando post - Enviando dados:', postData)
+      console.log('🖼️ featuredImage:', formData.featuredImage)
+      console.log('🖼️ coverImage:', postData.coverImage)
+
+      const response = await fetch(`/api/posts/${postId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(postData),
+      })
+
+      if (!response.ok) {
+        throw new Error('Falha ao atualizar o post')
+      }
+
+      const result = await response.json()
+      console.log('✅ Post atualizado:', result)
       
       // Redirecionar para a lista de posts
       router.push('/admin/posts')
@@ -231,7 +255,7 @@ export default function EditPostPage() {
     )
   }
 
-  if (!postExists) {
+  if (notFound) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -436,16 +460,34 @@ export default function EditPostPage() {
           {/* Imagem Destacada */}
           <div>
             <label htmlFor="featuredImage" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              URL da Imagem Destacada
+              Imagem Destacada
             </label>
-            <input
-              type="url"
-              id="featuredImage"
-              value={formData.featuredImage}
-              onChange={(e) => handleInputChange('featuredImage', e.target.value)}
-              placeholder="https://exemplo.com/imagem.jpg"
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
+            <div className="space-y-3">
+              {/* Upload do Cloudinary */}
+              <CloudinaryUploadWidget
+                onUploadAction={(imageUrl, publicId) => {
+                  setFormData(prev => ({
+                    ...prev,
+                    featuredImage: imageUrl
+                  }))
+                }}
+                preset="ml_default"
+                folder="blog-covers"
+                buttonText="Fazer Upload da Imagem"
+                className="w-full"
+              />
+              
+              {/* Campo de URL manual */}
+              <div className="text-center text-sm text-gray-500 dark:text-gray-400">ou</div>
+              <input
+                type="url"
+                id="featuredImage"
+                value={formData.featuredImage}
+                onChange={(e) => handleInputChange('featuredImage', e.target.value)}
+                placeholder="Cole a URL da imagem aqui..."
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
             {formData.featuredImage && (
               <div className="mt-3">
                 <Image
