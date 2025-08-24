@@ -8,7 +8,7 @@
 - **Residência**: Av. Marnoco e Sousa, Nº19, 3000-271, Coimbra, Portugal
 - **Telefone**: (+351) 960001464
 - **Email**: joseleite688@gmail.com
-- **LinkedIn**: https://www.linkedin.com/in/josé-leite-69318183
+- **LinkedIn**: https://www.linkedin.com/in/jos%C3%A9-leite-69318183/
 - **GitHub**: https://github.com/leitejose
 - **LinkTree**: https://linktr.ee/Joseleitedemedeirosneto
 

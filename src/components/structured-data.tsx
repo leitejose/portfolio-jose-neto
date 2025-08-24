@@ -2,14 +2,14 @@ export function PersonSchema() {
   const personData = {
     "@context": "https://schema.org",
     "@type": "Person",
-    "name": "José Leite",
+    "name": "José Neto",
     "jobTitle": "Programador Web",
     "description": "Programador Web especializado em React, TypeScript, NestJS e GraphQL. Mestrando em Sistemas de Informação de Gestão.",
     "url": "https://joseneto.tech",
     "image": "https://res.cloudinary.com/dvqzo7snh/image/upload/v1755253564/portfolio/portfolio/fotojose.jpg",
     "sameAs": [
       "https://github.com/leitejose",
-      "https://linkedin.com/in/jose-leite", // Adicione seu LinkedIn
+      "https://www.linkedin.com/in/jos%C3%A9-leite-69318183/"
     ],
     "knowsAbout": [
       "React",
@@ -47,12 +47,12 @@ export function WebsiteSchema() {
   const websiteData = {
     "@context": "https://schema.org",
     "@type": "Website",
-    "name": "José Leite - Portfolio",
-    "description": "Portfolio profissional de José Leite, Programador Web especializado em React, TypeScript, NestJS e GraphQL.",
+    "name": "José Neto - Portfolio",
+    "description": "Portfolio profissional de José Neto, Programador Web especializado em React, TypeScript, NestJS e GraphQL.",
     "url": "https://joseneto.tech",
     "author": {
       "@type": "Person",
-      "name": "José Leite"
+      "name": "José Neto"
     },
     "inLanguage": "pt-PT",
     "copyrightYear": new Date().getFullYear(),

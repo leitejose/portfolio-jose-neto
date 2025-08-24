@@ -132,14 +132,18 @@ export function Contact() {
               </h4>
               <div className="flex space-x-4">
                 <a
-                  href="#"
+                  href="https://www.linkedin.com/in/jos%C3%A9-leite-69318183/"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-12 h-12 bg-blue-600 hover:bg-blue-700 rounded-xl flex items-center justify-center transition-colors duration-200"
                   aria-label="LinkedIn"
                 >
                   <Linkedin className="w-6 h-6 text-white" />
                 </a>
                 <a
-                  href="#"
+                  href="https://github.com/leitejose"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-12 h-12 bg-gray-800 hover:bg-gray-900 rounded-xl flex items-center justify-center transition-colors duration-200"
                   aria-label="GitHub"
                 >

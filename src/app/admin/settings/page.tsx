@@ -75,8 +75,8 @@ export default function SettingsPage() {
     siteUrl: 'https://jose-portfolio.com',
     
     // Redes Sociais
-    github: 'https://github.com/jose',
-    linkedin: 'https://linkedin.com/in/jose',
+    github: 'https://github.com/leitejose',
+    linkedin: 'https://www.linkedin.com/in/jos%C3%A9-leite-69318183/',
     twitter: '',
     instagram: 'https://instagram.com/jose_photos',
     

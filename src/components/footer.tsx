@@ -10,9 +10,9 @@ export function Footer() {
           {/* Brand */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
-              <Logo width={32} height={32} alt="José Leite - Programador Web" />
+              <Logo width={32} height={32} alt="José Neto - Programador Web" />
               <div>
-                <h3 className="text-xl font-bold">José Leite</h3>
+                <h3 className="text-xl font-bold">José Neto</h3>
                 <p className="text-sm text-gray-400">Programador Web & Mestrando em SIG</p>
               </div>
             </div>
@@ -29,9 +29,9 @@ export function Footer() {
               <a href="#projects" className="text-gray-400 hover:text-white transition-colors duration-200 text-sm">
                 Projetos
               </a>
-              <a href="/blog" className="text-gray-400 hover:text-white transition-colors duration-200 text-sm">
+              <Link href="/blog" className="text-gray-400 hover:text-white transition-colors duration-200 text-sm">
                 Blog
-              </a>
+              </Link>
               <a href="/photography" className="text-gray-400 hover:text-white transition-colors duration-200 text-sm">
                 Fotografia
               </a>

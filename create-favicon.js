@@ -1,0 +1,27 @@
+// Script para criar favicon a partir da sua foto
+// Execute com: node create-favicon.js
+
+const fs = require('fs')
+const path = require('path')
+
+console.log('🎯 Para criar um favicon profissional com sua foto:')
+console.log('')
+console.log('📋 OPÇÕES:')
+console.log('')
+console.log('1. 🌐 ONLINE (Recomendado):')
+console.log('   - Vá para: https://www.favicon.io/favicon-converter/')
+console.log('   - Faça upload da sua foto: public/fotojose.jpeg')
+console.log('   - Baixe o favicon.ico gerado')
+console.log('   - Coloque na pasta public/')
+console.log('')
+console.log('2. 🛠️ MANUAL:')
+console.log('   - Abra sua foto no Paint/Photoshop/GIMP')
+console.log('   - Redimensione para 32x32 pixels')
+console.log('   - Salve como favicon.ico na pasta public/')
+console.log('')
+console.log('3. 📱 AUTOMÁTICO (Requer ImageMagick):')
+console.log('   - npm install sharp')
+console.log('   - node create-favicon-auto.js')
+console.log('')
+console.log('✅ Depois de criar o favicon.ico, atualize o layout.tsx para usar:')
+console.log('   icons: { icon: "/favicon.ico" }')

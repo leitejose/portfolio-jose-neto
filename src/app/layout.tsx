@@ -10,12 +10,12 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: {
-    default: 'José Leite - Programador Web & Mestrando em SIG',
-    template: '%s | José Leite - Programador Web'
+    default: 'José Neto',
+    template: '%s | José Neto'
   },
-  description: 'José Leite - Programador Web especializado em React, TypeScript, NestJS e GraphQL. Mestrando em Sistemas de Informação de Gestão com foco em análise de dados e otimização de processos.',
+  description: 'José Neto - Programador Web especializado em React, TypeScript, NestJS e GraphQL. Mestrando em Sistemas de Informação de Gestão com foco em análise de dados e otimização de processos.',
   keywords: [
-    'José Leite',
+    'José Neto',
     'programador web',
     'desenvolvedor frontend',
     'desenvolvedor backend',
@@ -32,9 +32,9 @@ export const metadata: Metadata = {
     'web developer',
     'fullstack developer'
   ],
-  authors: [{ name: 'José Leite', url: 'https://joseneto.tech' }],
-  creator: 'José Leite',
-  publisher: 'José Leite',
+  authors: [{ name: 'José Neto', url: 'https://joseneto.tech' }],
+  creator: 'José Neto',
+  publisher: 'José Neto',
   robots: {
     index: true,
     follow: true,
@@ -50,21 +50,21 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'pt_PT',
     url: 'https://joseneto.tech',
-    title: 'José Leite - Programador Web & Mestrando em SIG',
+    title: 'José Neto - Programador Web & Mestrando em SIG',
     description: 'Programador Web especializado em React, TypeScript, NestJS e GraphQL. Mestrando em Sistemas de Informação de Gestão.',
-    siteName: 'José Leite Portfolio',
+    siteName: 'José Neto Portfolio',
     images: [
       {
         url: 'https://res.cloudinary.com/dvqzo7snh/image/upload/v1755253564/portfolio/portfolio/fotojose.jpg',
         width: 1200,
         height: 630,
-        alt: 'José Leite - Programador Web',
+        alt: 'José Neto - Programador Web',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'José Leite - Programador Web & Mestrando em SIG',
+    title: 'José Neto - Programador Web & Mestrando em SIG',
     description: 'Programador Web especializado em React, TypeScript, NestJS e GraphQL.',
     images: ['https://res.cloudinary.com/dvqzo7snh/image/upload/v1755253564/portfolio/portfolio/fotojose.jpg'],
   },
@@ -73,6 +73,16 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: 'https://joseneto.tech',
+  },
+  icons: {
+    icon: [
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' }
+    ],
+    shortcut: '/favicon-32x32.png',
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }
+    ],
   },
 }
 

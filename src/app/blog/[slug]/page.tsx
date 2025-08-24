@@ -124,7 +124,7 @@ export default async function PostPage({ params }: PostPageProps) {
 
             <div className="flex items-center">
               <User className="h-4 w-4 mr-2" />
-              José Leite
+              José Neto
             </div>
 
             {post.featured && (
@@ -173,11 +173,11 @@ export async function generateMetadata({ params }: PostPageProps) {
   }
 
   return {
-    title: `${post.title} - José Leite`,
-    description: post.excerpt || 'Blog de José Leite',
+    title: `${post.title} - José Neto`,
+    description: post.excerpt || 'Blog de José Neto',
     openGraph: {
       title: post.title,
-      description: post.excerpt || 'Blog de José Leite',
+      description: post.excerpt || 'Blog de José Neto',
       images: post.coverImage ? [post.coverImage] : [],
     },
   }

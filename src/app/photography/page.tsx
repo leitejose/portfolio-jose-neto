@@ -1,7 +1,9 @@
+
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
 import { MapPin, Calendar, X, ChevronLeft, ChevronRight, Search, Filter } from 'lucide-react'
+import Image from 'next/image'
 
 interface CloudinaryPhoto {
   id: string
@@ -82,7 +84,7 @@ const PhotoImage = ({ src, alt, width, height, className, sizes, onClick }: {
           <div className="text-gray-500 dark:text-gray-400 text-sm">Carregando...</div>
         </div>
       )}
-      <img
+      <Image
         src={optimizeCloudinaryUrl(src, 640, 75)}
         alt={alt}
         width={width}

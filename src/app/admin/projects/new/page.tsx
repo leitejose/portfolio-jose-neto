@@ -1,3 +1,4 @@
+
 'use client'
 
 import { useState } from 'react'
@@ -5,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Save } from 'lucide-react'
 import { convertGoogleDriveUrl, getProxiedImageUrl } from '@/lib/image-utils'
+import Image from 'next/image'
 
 interface ProjectFormData {
   title: string
@@ -232,9 +234,11 @@ export default function NewProjectPage() {
                 {formData.imageUrl && (
                   <div className="mt-3">
                     <div className="w-full max-w-sm">
-                      <img
+                      <Image
                         src={formData.imageUrl}
                         alt="Preview"
+                        width={400}
+                        height={128}
                         className="w-full h-32 object-cover rounded-lg border border-gray-300 dark:border-gray-600"
                         onError={(e) => {
                           console.error('Erro ao carregar imagem');

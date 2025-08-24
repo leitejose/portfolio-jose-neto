@@ -128,7 +128,7 @@ export async function GET() {
             excerpt: "Explorando as melhores práticas para desenvolvimento frontend moderno...",
             status: "published",
             views: 156,
-            author: "José Leite",
+            author: "José Neto",
             categories: ["React", "TypeScript"],
             createdAt: new Date('2025-08-05')
           },
@@ -138,7 +138,7 @@ export async function GET() {
             excerpt: "Como criar dashboards eficientes para análise de dados empresariais...",
             status: "published",
             views: 203,
-            author: "José Leite",
+            author: "José Neto",
             categories: ["Power BI", "Analytics"],
             createdAt: new Date('2025-08-03')
           }

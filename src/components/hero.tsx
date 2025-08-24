@@ -22,7 +22,7 @@ export function Hero() {
                 <div className="w-full h-full rounded-full bg-white dark:bg-gray-800 flex items-center justify-center overflow-hidden">
                   <Image
                     src="https://res.cloudinary.com/dvqzo7snh/image/upload/v1755253564/portfolio/portfolio/fotojose.jpg"
-                    alt="José Leite - Programador Web"
+                    alt="José Neto - Programador Web"
                     width={300}
                     height={300}
                     className="rounded-full object-cover w-full h-full"
@@ -46,7 +46,7 @@ export function Hero() {
             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white leading-tight">
               Olá, eu sou{' '}
               <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                José Leite
+                José Neto
               </span>
             </h1>
             

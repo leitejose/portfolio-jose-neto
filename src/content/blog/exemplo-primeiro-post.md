@@ -29,4 +29,4 @@ console.log('Olá Markdown!');
 
 ---
 
-*Publicado por José Leite em 20/08/2025.*
+*Publicado por José Neto em 20/08/2025.*

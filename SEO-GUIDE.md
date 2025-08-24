@@ -1,4 +1,4 @@
-# 🚀 Guia Completo de SEO para Portfolio José Leite
+# 🚀 Guia Completo de SEO para Portfolio José Neto
 
 ## ✅ Implementações Feitas
 
