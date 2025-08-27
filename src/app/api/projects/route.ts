@@ -20,13 +20,6 @@ export async function GET(request: NextRequest) {
     const [projects, totalCount] = await Promise.all([
       prisma.project.findMany({
         where: whereClause,
-        include: {
-          technologies: {
-            include: {
-              technology: true
-            }
-          }
-        },
         skip,
         take: limit,
         orderBy: { order: 'asc' },
